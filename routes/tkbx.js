@@ -1,50 +1,45 @@
 var express = require('express');
 var router = express.Router();
 
-
-var  apiKey = '46688592';
-const apiSecret = 'af3d6b6c800d665f6a56f8e36474a5714f59220c';
-/* STEP 1 : Require TB client and initalize it */
-var OpenTok = require('opentok'),
-    opentok = new OpenTok(apiKey, apiSecret);
+var sessionId;
 
 
+/* STEP 1
+
+Require TB client and initalize it
+
+*/
+
+const createSession = onSessionCreated => {
+  /* STEP 2
+
+  Generate session and update the property sessionId. Then call 'onSessionCreated()' method.
+        "...sessionId = 123453;"
+        "...onSessionCreated();"
+
+  */
+};
 
 router.post('/session/', function(req, res, next) {
-  if (!session) {
-    opentok.createSession(function(err, session) {
-      if (err) return console.log(err);
-        sessionId = session.sessionId;
-        console.log(session)
-      });
+  var onSessionCreated = () => {
+    res.json({ sessionId: sessionId });
+  };
 
-    res.json({ currentsessionId: sessionId });
+  if (!sessionId) {
+    createSession(onSessionCreated);
   } else {
-
-    res.json({ currentsessionId: sessionId });
+    onSessionCreated();
   }
 });
 
 router.post('/user/', function(req, res, next) {
   /* STEP 3
-  Create token and return to client  
-  const token = 'COMPLETE HERE';
+
+  Create oken and return to client
+        
   */
-  const token = session.generateToken({
-    role :                   'publisher',
-    expireTime :             (new Date().getTime() / 1000)+(1 * 60 * 60), // 1 day
-    data :                   'name=Johnny',
-    initialLayoutClassList : ['focus']
-  });
-
-  console.log(token)
-
-  if (token) {
-    res.json({ token });
-  } else {
-    console.log(" Error occurred when generating token using session Id")
-    res.json({ token })
-  }
+  const token = 'COMPLETE HERE';
+  res.json({ token });
 });
 
 module.exports = router;
